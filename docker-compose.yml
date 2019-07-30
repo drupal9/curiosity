@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  api:
+    build :
+      context: .
+      dockerfile: ./docker/build/api/Dockerfile
+
+    ports:
+      - "5000:8080"
+    hostname: curiosity.ld
+    volumes:
+          - ./app:/var/www/app
+
+#  webapp:
+#      build:
+#        context: .
+#        dockerfile: ./docker/build/webapp/Dockerfile
+#      ports:
+#        - "13540:80"
+#      depends_on:
+#        - api
