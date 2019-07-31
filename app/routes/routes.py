@@ -8,6 +8,8 @@ from functools import wraps
 from cheroot.wsgi import Server as WSGIServer
 import os
 import requests
+import wikipedia
+import json
 
 app = Bottle()
 
@@ -37,6 +39,28 @@ def enable_cors(fn):
 @enable_cors
 def index():
     return 'Here is the home';
+
+@app.route('/todays-word/<search_text>')
+@enable_cors
+def wikipediaSearch(search_text):
+    response_string = ""
+    wikipedia.set_lang("en")
+    search_response = wikipedia.search(search_text)
+    if not search_response:
+        response_string = "this word is not registered."
+        return response_string
+    try:
+        wiki_page = wikipedia.page(search_response[0])
+    except Exception as e:
+        response_string = "error \n{}\n{}".format(e.message, str(e))
+        return response_string
+    wiki_content = wiki_page.content
+    todays_word = "Today's word: "+ search_text
+    explanation = wiki_content[0:wiki_content.find(".")]
+    url = "here is the link：" + wiki_page.url
+    return json.dumps({"word":todays_word, "explanation": explanation, "url":url})
+
+
 
 
 @app.route('/test')
