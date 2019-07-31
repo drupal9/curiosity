@@ -57,7 +57,7 @@ def wikipediaSearch(search_text):
     wiki_content = wiki_page.content
     todays_word = "Today's word: "+ search_text
     explanation = wiki_content[0:wiki_content.find(".")]
-    url = "here is the link：" + wiki_page.url
+    url = wiki_page.url
     return json.dumps({"word":todays_word, "explanation": explanation, "url":url})
 
 
