@@ -2,21 +2,26 @@ version: '3'
 
 services:
   api:
-    build :
+    build:
       context: .
       dockerfile: ./docker/build/api/Dockerfile
 
     ports:
       - "5000:8080"
-    hostname: curiosity.ld
+
     volumes:
           - ./app:/var/www/app
 
-#  webapp:
-#      build:
-#        context: .
-#        dockerfile: ./docker/build/webapp/Dockerfile
-#      ports:
-#        - "13540:80"
-#      depends_on:
-#        - api
+  webapp:
+      build:
+        context: .
+        dockerfile: ./docker/build/webapp/Dockerfile
+      ports:
+        - "8000:80"
+
+      depends_on:
+        - api
+
+      volumes:
+        - ./docker/etc/apache/webapp.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+        - ./webapp:/var/www
